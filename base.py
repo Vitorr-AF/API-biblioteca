@@ -37,7 +37,7 @@ def PUT_livros(id):
     livros = dados['livros']
     novo_livro = request.get_json()
     livro_filtrado = {}
-    chaves = ["id", "titulo", "autor", "ano", "preco"]
+    chaves = ["id", "titulo", "autor", "ano", "generos", "preco"]
 
     for x in chaves:
         if x not in novo_livro:
@@ -53,12 +53,21 @@ def PUT_livros(id):
     return jsonify({"Erro": "Livro não encontrado"}), 404
 
 
-@app.route('/livros', methods=['PATCH'])
-def PATCH_livros():
+@app.route('/livros/<int:id>', methods=['PATCH'])
+def PATCH_livros(id):
     dados = get_dados()
-    #fazer depois de definir os campos do arquivo
+    livros = dados['livros']
+    novo_livro = request.get_json()
+    
+    for i, livro in enumerate(livros):
+        if livro["id"] == id:
+            for chave, valor in novo_livro.items():
+                if chave in livro:
+                    livros[i][chave] = valor
+            put_dados(dados)
+            return jsonify(livros[i]), 200
 
-    return jsonify({"msg": "Método ainda não implementado"}), 501
+    return jsonify({"Erro": "Livro não encontrado"}), 404
 
 
 @app.route('/livros', methods=['DELETE'])

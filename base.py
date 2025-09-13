@@ -23,12 +23,20 @@ def GET_livros():
 @app.route('/livros', methods=['POST'])
 def POST_livros():
     dados = get_dados()
+    livros = dados['livros']
     novo_livro = request.get_json()
-    dados['livros'].append(novo_livro)
+    chaves = ["id", "titulo", "autor", "ano", "generos", "preco"]
+    livro_filtrado = {}
 
+    for x in chaves:
+        if x not in novo_livro:
+            return jsonify({"Erro": f"Chave {x} ausente"}), 400
+        livro_filtrado[x] = novo_livro[x]
+
+    livros.append(livro_filtrado)
     put_dados(dados)
 
-    return jsonify(novo_livro), 201
+    return jsonify(livro_filtrado), 201
 
 
 @app.route('/livros/<int:id>', methods=['PUT'])

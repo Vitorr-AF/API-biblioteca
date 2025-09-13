@@ -27,11 +27,15 @@ def POST_livros():
     novo_livro = request.get_json()
     chaves = ["id", "titulo", "autor", "ano", "generos", "preco"]
     livro_filtrado = {}
+    ausentes = []
 
     for x in chaves:
         if x not in novo_livro:
-            return jsonify({"Erro": f"Chave {x} ausente"}), 400
-        livro_filtrado[x] = novo_livro[x]
+            ausentes.append(x)
+        else:
+            livro_filtrado[x] = novo_livro[x]
+    if ausentes:
+        return jsonify({"Erro": f"Chaves ausentes: {ausentes}"}), 400
 
     livros.append(livro_filtrado)
     put_dados(dados)
@@ -46,11 +50,15 @@ def PUT_livros(id):
     novo_livro = request.get_json()
     livro_filtrado = {}
     chaves = ["id", "titulo", "autor", "ano", "generos", "preco"]
+    ausentes = []
 
     for x in chaves:
         if x not in novo_livro:
-            return jsonify({"Erro": f"Chave {x} ausente"}), 400
-        livro_filtrado[x] = novo_livro[x]
+            ausentes.append(x)
+        else:
+            livro_filtrado[x] = novo_livro[x]
+    if ausentes:
+        return jsonify({"Erro": f"Chaves ausentes: {ausentes}"}), 400
     
     for i, livro in enumerate(livros):
         if livro["id"] == id:

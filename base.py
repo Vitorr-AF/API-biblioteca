@@ -78,12 +78,17 @@ def PATCH_livros(id):
     return jsonify({"Erro": "Livro não encontrado"}), 404
 
 
-@app.route('/livros', methods=['DELETE'])
-def DELETE_livros():
+@app.route('/livros/<int:id>', methods=['DELETE'])
+def DELETE_livros(id):
     dados = get_dados()
+    livros = dados["livros"]
 
-
-    return jsonify({"msg": "Método ainda não implementado"}), 501
+    for i, livro in enumerate(livros):
+        if livro["id"] == id:
+            deletado = livros.pop(i)
+            return jsonify(deletado), 200
+    
+    return jsonify({"Erro": "Livro não encontrado"}), 404
 
 
 

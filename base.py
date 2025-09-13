@@ -23,19 +23,34 @@ def GET_livros():
 @app.route('/livros', methods=['POST'])
 def POST_livros():
     dados = get_dados()
-    dados['livros'].append(request.get_json())
+    novo_livro = request.get_json()
+    dados['livros'].append(novo_livro)
 
     put_dados(dados)
 
-    return request.get_json(), 201
+    return jsonify(novo_livro), 201
 
 
-@app.route('/livros', methods=['PUT'])
-def PUT_livros():
+@app.route('/livros/<int:id>', methods=['PUT'])
+def PUT_livros(id):
     dados = get_dados()
-    #fazer depois de definir os campos do arquivo
+    livros = dados['livros']
+    novo_livro = request.get_json()
+    livro_filtrado = {}
+    chaves = ["id", "titulo", "autor", "ano", "preco"]
+
+    for x in chaves:
+        if x not in novo_livro:
+            return jsonify({"Erro": f"Chave {x} ausente"}), 400
+        livro_filtrado[x] = novo_livro[x]
     
-    return jsonify({"msg": "Método ainda não implementado"}), 501
+    for i, livro in enumerate(livros):
+        if livro["id"] == id:
+            livros[i] = livro_filtrado
+            put_dados(dados)
+            return jsonify(livro_filtrado), 200
+        
+    return jsonify({"Erro": "Livro não encontrado"}), 404
 
 
 @app.route('/livros', methods=['PATCH'])

@@ -111,6 +111,7 @@ def DELETE_livros(id):
     for i, livro in enumerate(livros):
         if livro["id"] == id:
             deletado = livros.pop(i)
+            put_dados(livros)
             return jsonify(deletado), 200
     
     return jsonify({"Erro": "Livro não encontrado"}), 404

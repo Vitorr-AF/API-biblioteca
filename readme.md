@@ -56,7 +56,7 @@ python base.py
 
 ## Observações
 
-- O arquivo `Dados.json` é atualizado a cada operação de criação, atualização ou exclusão de livros.  
+- O arquivo `dados.json` é atualizado a cada operação de criação, atualização ou exclusão de livros.  
 - O POST gera automaticamente o `id` do novo livro.  
 - PUT exige todos os campos obrigatórios (`id`, `titulo`, `autor`, `ano`, `generos`, `preco`).  
 - PATCH permite atualizar apenas os campos desejados.  
